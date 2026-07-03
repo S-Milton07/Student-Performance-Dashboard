@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./App.css";   
-import "./Login.css"; 
+import "./login.css"; 
 
 const VALID_USERNAME = "MiltonLawrence";
 const VALID_PASSWORD = "Milton@2005";
