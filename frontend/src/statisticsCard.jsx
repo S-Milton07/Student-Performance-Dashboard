@@ -19,4 +19,4 @@ const StatisticsCard = ({result}) => {
     )
 }
 
-export default StatisticsCard
+export default StatisticsCard;

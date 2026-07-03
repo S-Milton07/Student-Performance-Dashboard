@@ -26,4 +26,4 @@ const GradesCard = ({ result }) => {
     )
 }
 
-export default GradesCard
+export default GradesCard;

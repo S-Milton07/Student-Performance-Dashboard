@@ -18,4 +18,4 @@ const StudentCard = ({result}) => {
     )
 }
 
-export default StudentCard
+export default StudentCard;
