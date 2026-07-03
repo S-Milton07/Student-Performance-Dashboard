@@ -1,5 +1,5 @@
 import { useState } from "react";
-import StatisticsCard from "./StatisticsCard";
+import StatisticsCard from "./statisticsCard";
 import StudentCard from "./studentCard";
 import GradesCard from "./gradesCard";
 import SearchCard from "./searchCard";
