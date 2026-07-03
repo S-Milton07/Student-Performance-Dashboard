@@ -1,0 +1,232 @@
+/* ==========================================================================================
+   LOGIN PAGE — Login.css
+   ==========================================================================================
+   This file ONLY adds layout for the login page itself (the centered card, input
+   fields, error text, footer). It does NOT redefine any color tokens, fonts, or
+   the background canvas — all of that is inherited from App.css (imported first
+   in Login.jsx), since both files share the same :root CSS variables. This is
+   what guarantees the login page looks like part of the same application rather
+   than a different design.
+   ========================================================================================== */
+
+/* The outer .app wrapper already gives us the full-bleed animated background,
+   grid overlay, and hero title styling for free (it's the same class used by
+   the dashboard). We only need to center a single card beneath the title. */
+.login-app {
+  justify-content: flex-start;
+  align-items: stretch;
+  padding-top: 0.5rem;
+}
+
+.login-app > h1 {
+  margin: 0 0 10px;
+  padding-top: 1rem;
+  padding-bottom: 0.5rem;
+}
+
+.login-wrapper {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  flex: 1;
+  padding: 0 0 clamp(1rem, 3vw, 2rem);
+}
+
+/* The login card itself — same glassmorphism language as .upload-box / .content
+   in the main dashboard: translucent fill, blur, soft border, layered shadow. */
+.login-card {
+  position: relative;
+  width: 100%;
+  max-width: 26rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+
+  padding: clamp(2rem, 5vw, 3rem) clamp(1.5rem, 4vw, 2.5rem);
+
+  background: var(--glass-fill);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  backdrop-filter: blur(20px) saturate(150%);
+  -webkit-backdrop-filter: blur(20px) saturate(150%);
+  box-shadow:
+    0 1.8rem 3.6rem var(--glass-shadow),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+
+  animation: loginCardRise var(--dur-slow) var(--ease-out-soft);
+  transition: transform var(--dur-med) var(--ease-out-soft),
+              box-shadow var(--dur-med) var(--ease-out-soft);
+}
+
+.login-card:hover {
+  transform: translateY(-0.2rem);
+  box-shadow:
+    0 2.2rem 4.2rem var(--glass-shadow),
+    inset 0 1px 0 rgba(255, 255, 255, 0.45);
+}
+
+@keyframes loginCardRise {
+  from { opacity: 0; transform: translateY(1.4rem) scale(0.97); filter: blur(4px); }
+  to   { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+}
+
+/* Lock icon badge at the top of the card */
+.login-icon {
+  width: 3.6rem;
+  height: 3.6rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  border-radius: 50%;
+  margin-bottom: var(--space-1);
+
+  background: linear-gradient(135deg, var(--card-stats-a), var(--card-stats-b));
+  box-shadow: 0 0 1.6rem rgba(148, 163, 184, 0.55);
+  animation: iconPulse 2.6s ease-in-out infinite;
+}
+
+@keyframes iconPulse {
+  0%, 100% { box-shadow: 0 0 1.2rem rgba(148, 163, 184, 0.4); }
+  50%      { box-shadow: 0 0 1.8rem rgba(148, 163, 184, 0.65); }
+}
+
+.login-title {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(1.4rem, 3vw, 1.8rem);
+  color: var(--paper);
+  margin: 0;
+  text-align: center;
+}
+
+.login-subtitle {
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0 0 var(--space-2);
+  text-align: center;
+}
+
+/* Input fields — labeled stacked groups */
+.login-field {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-bottom: var(--space-1);
+}
+
+.login-field label {
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.85);
+  letter-spacing: 0.02em;
+}
+
+.login-field input {
+  width: 100%;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.94);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-sm);
+  padding: 0.75rem 1rem;
+  box-shadow: 0 0.4rem 1.2rem var(--glass-shadow);
+  transition: box-shadow var(--dur-fast) ease,
+              transform var(--dur-fast) ease,
+              border-color var(--dur-fast) ease;
+}
+
+.login-field input::placeholder {
+  color: var(--ink-soft);
+}
+
+.login-field input:focus {
+  transform: translateY(-1px);
+  border-color: var(--accent-cyan);
+  box-shadow: 0 0 0 0.2rem var(--accent-cyan-soft), 0 0.6rem 1.6rem var(--accent-cyan-soft);
+}
+
+/* Error message */
+.login-error {
+  width: 100%;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #fecaca;
+  background: rgba(251, 113, 133, 0.16);
+  border: 1px solid rgba(251, 113, 133, 0.4);
+  border-radius: var(--radius-sm);
+  padding: 0.6rem 0.9rem;
+  margin: 0;
+  text-align: center;
+  animation: errorShake 0.4s ease;
+}
+
+@keyframes errorShake {
+  0%, 100% { transform: translateX(0); }
+  25%      { transform: translateX(-0.3rem); }
+  75%      { transform: translateX(0.3rem); }
+}
+
+/* Login button — same premium pill treatment as the dashboard's buttons */
+.login-btn {
+  width: 100%;
+  margin-top: var(--space-1);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1rem;
+  letter-spacing: 0.01em;
+  color: var(--paper);
+
+  padding: 0.85rem 2rem;
+  border: none;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+
+  background: linear-gradient(135deg, var(--ink) 0%, #2b2470 60%, var(--bg-mid) 100%);
+  box-shadow: 0 0.6rem 1.6rem rgba(10, 8, 35, 0.55);
+
+  transition: transform var(--dur-fast) var(--ease-out-soft),
+              box-shadow var(--dur-med) var(--ease-out-soft),
+              opacity var(--dur-fast) ease;
+}
+
+.login-btn:hover:not(:disabled) {
+  transform: translateY(-0.15rem) scale(1.02);
+  box-shadow:
+    0 1rem 2.2rem rgba(10, 8, 35, 0.6),
+    0 0 1.4rem rgba(148, 163, 184, 0.5);
+}
+
+.login-btn:active:not(:disabled) {
+  transform: translateY(0) scale(0.99);
+}
+
+.login-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.login-footer {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: rgba(255, 255, 255, 0.5);
+  margin: var(--space-1) 0 0;
+  text-align: center;
+  letter-spacing: 0.02em;
+}
+
+/* Small phones */
+@media (max-width: 26rem) {
+  .login-card {
+    padding: 1.75rem 1.25rem;
+  }
+}

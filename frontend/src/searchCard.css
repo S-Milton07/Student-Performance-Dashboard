@@ -1,0 +1,48 @@
+.search-card{
+
+    width:420px;
+    margin:auto;
+
+    background:rgba(255,255,255,.08);
+
+    border-radius:20px;
+
+    padding:25px;
+
+    text-align:center;
+
+    backdrop-filter:blur(15px);
+
+    box-shadow:0 8px 25px rgba(0,0,0,.25);
+
+    color:white;
+
+}
+
+.profile-icon{
+
+    font-size:70px;
+
+    margin-bottom:10px;
+
+}
+
+.search-card h2{
+
+    margin-bottom:20px;
+
+}
+
+.search-details{
+
+    text-align:left;
+
+}
+
+.search-details p{
+
+    font-size:18px;
+
+    margin:12px 0;
+
+}

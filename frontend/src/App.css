@@ -1,0 +1,1012 @@
+/* ==========================================================================================
+   STUDENT PERFORMANCE DASHBOARD — App.css  (v2 — Premium VFX Edition)
+   ==========================================================================================
+   Design system: "Aurora Glass" — an animated mesh-gradient analytics dashboard with a
+   hero-style title treatment, layered glass cards, and deliberate motion throughout.
+
+   Token system:
+     Color:
+       --bg-deep       #16133a   (near-black indigo, canvas base)
+       --bg-mid        #4338ca   (royal indigo)
+       --bg-bright     #7c6df9   (periwinkle highlight)
+       --accent-cyan   #22d3ee   (primary data accent)
+       --accent-violet #a855f7   (secondary accent, used in gradients/glow)
+       --accent-mint   #34d399   (positive / pass state)
+       --accent-amber  #fbbf24   (warning / mid grades)
+       --accent-rose   #fb7185   (negative / fail state)
+       --ink           #0f1230   (text on light glass surfaces)
+       --paper         #ffffff
+
+     Type:
+       Display : "Sora"           — the hero title and card headings
+       Body    : "Inter"          — paragraphs, table data
+       Mono    : "JetBrains Mono" — stats, IDs, scores (numbers read as data)
+
+     Layout:
+       Full-bleed animated mesh-gradient canvas → oversized hero title with glow +
+       animated underline → glass upload console → card ribbon with 3D tilt-on-hover →
+       expanding glass content panel.
+
+     Signature element:
+       The hero title sits inside a soft aurora glow halo with an animated gradient
+       sweep and a drawing underline accent — the page's one big, unmistakable moment.
+       The card ribbon's 3D tilt-on-hover is the secondary, interactive signature.
+   ========================================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap');
+
+/* ------------------------------------------------------------------------------------------
+   0. DESIGN TOKENS
+   ------------------------------------------------------------------------------------------ */
+:root {
+  --bg-deep: #1c1f26;
+  --bg-mid: #2e333d;
+  --bg-bright: #454c58;
+  --accent-cyan: #6b7280;
+  --accent-cyan-soft: rgba(148, 163, 184, 0.18);
+  --accent-violet: #94a3b8;
+  --accent-mint: #34d399;
+  --accent-amber: #fbbf24;
+  --accent-rose: #fb7185;
+  --ink: #0f1230;
+  --ink-soft: #4b4f72;
+  --paper: #ffffff;
+
+  /* Single shared card accent color (Statistics / Students / Grades / Search) */
+  --card-stats-a: #4b5563;
+  --card-stats-b: #94a3b8;
+  --card-students-a: #4b5563;
+  --card-students-b: #94a3b8;
+  --card-grades-a: #4b5563;
+  --card-grades-b: #94a3b8;
+  --card-search-a: #4b5563;
+  --card-search-b: #94a3b8;
+
+  --glass-fill: rgba(255, 255, 255, 0.13);
+  --glass-fill-strong: rgba(255, 255, 255, 0.22);
+  --glass-border: rgba(255, 255, 255, 0.35);
+  --glass-shadow: rgba(10, 8, 35, 0.45);
+
+  --font-display: 'Sora', 'Segoe UI', sans-serif;
+  --font-body: 'Inter', 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', 'Consolas', monospace;
+
+  --radius-sm: 0.6rem;
+  --radius-md: 1rem;
+  --radius-lg: 1.7rem;
+  --radius-pill: 999px;
+
+  --space-1: 0.5rem;
+  --space-2: 0.875rem;
+  --space-3: 1.5rem;
+  --space-4: 2.25rem;
+  --space-5: 3.5rem;
+
+  --ease-out-soft: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --dur-fast: 160ms;
+  --dur-med: 360ms;
+  --dur-slow: 700ms;
+}
+
+/* ------------------------------------------------------------------------------------------
+   1. RESET & BASE
+   ------------------------------------------------------------------------------------------ */
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 100%;
+  width: 100%;
+}
+
+body {
+  margin: 0 !important;
+  padding: 0 !important;
+  width: 100% !important;
+  max-width: none !important;
+  min-height: 100vh;
+  display: block !important;
+  place-items: unset !important;
+  font-family: var(--font-body);
+  color: var(--paper);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+  background: var(--bg-deep);
+}
+
+/* Reset Vite's default #root scaffold rule (max-width/centering) so the
+   dashboard goes truly edge-to-edge instead of leaving empty side gutters. */
+#root {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  min-height: 100vh;
+  display: block !important;
+  text-align: left;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+button:focus-visible,
+input:focus-visible,
+a:focus-visible {
+  outline: 0.15rem solid var(--accent-cyan);
+  outline-offset: 0.2rem;
+}
+
+/* ------------------------------------------------------------------------------------------
+   2. CANVAS — animated aurora mesh-gradient background + drifting grid + particles
+   ------------------------------------------------------------------------------------------ */
+
+.app {
+  position: relative;
+  min-height: 100vh;
+  width: 100%;
+  overflow-x: hidden;
+  isolation: isolate;
+
+  background:
+    radial-gradient(circle at 50% 0%, transparent 50%, rgba(10, 11, 14, 0.45) 100%),
+    radial-gradient(circle at 15% 20%, rgba(148, 163, 184, 0.18) 0%, transparent 42%),
+    radial-gradient(circle at 85% 15%, rgba(100, 116, 139, 0.16) 0%, transparent 40%),
+    radial-gradient(circle at 80% 85%, rgba(69, 76, 88, 0.4) 0%, transparent 42%),
+    radial-gradient(circle at 20% 90%, rgba(148, 163, 184, 0.12) 0%, transparent 38%),
+    linear-gradient(135deg, var(--bg-deep) 0%, var(--bg-mid) 55%, var(--bg-bright) 100%);
+  background-size: 100% 100%, 200% 200%, 200% 200%, 200% 200%, 200% 200%, 220% 220%;
+  animation: auroraDrift 26s var(--ease-out-soft) infinite alternate;
+
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+
+  padding: clamp(1.5rem, 3vw, 2.5rem) clamp(1.25rem, 3vw, 3rem) clamp(3rem, 6vw, 5rem);
+}
+
+@keyframes auroraDrift {
+  0%   { background-position: 0% 0%, 0% 0%, 100% 0%, 100% 100%, 0% 100%, 0% 0%; }
+  100% { background-position: 0% 0%, 14% 10%, 86% 14%, 88% 90%, 8% 86%, 12% 12%; }
+}
+
+/* --------------------------------------------------------------------------------------
+   HERO BACKGROUND ARTWORK — pure CSS, zero JSX changes, zero external image files.
+   --------------------------------------------------------------------------------------
+   This is a hand-built inline SVG (encoded as a data-URI) depicting a soft analytics
+   motif behind the title: a rising bar-chart cluster, a climbing line-graph polyline,
+   and scattered data nodes — all drawn in the dashboard's own palette so it reads as
+   part of the design system rather than a decorative sticker.
+
+   Parallax: `background-attachment: fixed` pins this artwork to the *viewport*
+   instead of the page, so as the user scrolls the page content, the artwork stays
+   put relative to the screen and the foreground glides over it — the classic
+   "scrolling parallax" depth cue, achieved with zero JavaScript.
+*/
+.app::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.5;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1600 900' preserveAspectRatio='xMidYMid slice'%3E%3Cdefs%3E%3ClinearGradient id='barGrad' x1='0' y1='1' x2='0' y2='0'%3E%3Cstop offset='0%25' stop-color='%2322d3ee' stop-opacity='0'/%3E%3Cstop offset='100%25' stop-color='%2322d3ee' stop-opacity='0.55'/%3E%3C/linearGradient%3E%3ClinearGradient id='lineGrad' x1='0' y1='0' x2='1' y2='0'%3E%3Cstop offset='0%25' stop-color='%2334d399' stop-opacity='0.15'/%3E%3Cstop offset='50%25' stop-color='%2334d399' stop-opacity='0.85'/%3E%3Cstop offset='100%25' stop-color='%23a855f7' stop-opacity='0.7'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cg opacity='0.9'%3E%3Crect x='120' y='560' width='46' height='180' rx='8' fill='url(%23barGrad)'/%3E%3Crect x='190' y='480' width='46' height='260' rx='8' fill='url(%23barGrad)'/%3E%3Crect x='260' y='520' width='46' height='220' rx='8' fill='url(%23barGrad)'/%3E%3Crect x='330' y='400' width='46' height='340' rx='8' fill='url(%23barGrad)'/%3E%3C/g%3E%3Cpolyline points='1080,620 1160,540 1240,580 1320,420 1400,470 1480,340' fill='none' stroke='url(%23lineGrad)' stroke-width='6' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cg fill='%23ffffff'%3E%3Ccircle cx='1080' cy='620' r='7'/%3E%3Ccircle cx='1240' cy='580' r='6'/%3E%3Ccircle cx='1400' cy='470' r='6'/%3E%3Ccircle cx='1480' cy='340' r='8'/%3E%3C/g%3E%3Cg fill='%23fbbf24' opacity='0.8'%3E%3Ccircle cx='620' cy='180' r='6'/%3E%3Ccircle cx='760' cy='620' r='5'/%3E%3C/g%3E%3Cg fill='%23a855f7' opacity='0.7'%3E%3Ccircle cx='900' cy='160' r='7'/%3E%3Ccircle cx='480' cy='760' r='5'/%3E%3C/g%3E%3Cg fill='%2322d3ee' opacity='0.55'%3E%3Ccircle cx='1540' cy='720' r='5'/%3E%3Ccircle cx='60' cy='760' r='4'/%3E%3Ccircle cx='1000' cy='760' r='4'/%3E%3C/g%3E%3Cg stroke='%23ffffff' stroke-opacity='0.18' stroke-width='2'%3E%3Cline x1='0' y1='760' x2='1600' y2='760'/%3E%3C/g%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center 4rem;
+  background-size: min(96rem, 140vw) auto;
+  background-attachment: fixed;
+  animation: artworkDrift 14s ease-in-out infinite;
+}
+
+@keyframes artworkDrift {
+  0%, 100% { background-position: center 4rem; }
+  50%      { background-position: center 5.2rem; }
+}
+
+/* Faint animated grid overlay layered above the artwork — reads as "analytics
+   software", evokes chart gridlines without literally drawing another chart. */
+.app::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 3.2rem 3.2rem;
+  background-attachment: fixed;
+  mask-image: radial-gradient(circle at 50% 30%, black 0%, transparent 75%);
+  animation: gridFloat 40s linear infinite;
+}
+
+@keyframes gridFloat {
+  0%   { background-position: 0 0, 0 0; }
+  100% { background-position: 3.2rem 6.4rem, -3.2rem 3.2rem; }
+}
+
+/* Soft vignette so content near edges still reads as "inside" the canvas.
+   Folded into .app's own background stack (section 2) as an extra radial
+   layer — no extra markup needed, and it sits correctly behind ::before/::after. */
+
+/* ------------------------------------------------------------------------------------------
+   3. HERO TITLE — the page's one big, unmistakable moment
+   ------------------------------------------------------------------------------------------
+   We style the existing <h1>Student Performance Dashboard</h1> directly — no JSX
+   changes required. The heading becomes an oversized, glowing, animated-gradient
+   hero with a halo behind it, a drawing underline accent beneath it, and a
+   CSS-only analytics illustration (bars + line graph + floating data dots)
+   sitting behind/around it that drifts gently as the page is scrolled (parallax).
+*/
+
+.app > h1 {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  text-align: center;
+
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(2.4rem, 6vw, 5rem);
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+
+  margin: clamp(1rem, 3vw, 2.5rem) 0 clamp(2.5rem, 5vw, 4rem);
+  padding: clamp(2rem, 6vw, 3.5rem) 1rem clamp(1rem, 3vw, 2rem);
+
+  /* Animated gradient fill on the text itself */
+  background-image: linear-gradient(
+    100deg,
+    var(--paper) 0%,
+    var(--accent-cyan) 22%,
+    var(--paper) 44%,
+    var(--accent-violet) 66%,
+    var(--paper) 88%,
+    var(--accent-cyan) 100%
+  );
+  background-size: 300% 100%;
+  background-position: 0% 0%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: heroShimmer 8s linear infinite;
+
+  filter: drop-shadow(0 0.6rem 2rem rgba(124, 109, 249, 0.55));
+}
+
+@keyframes heroShimmer {
+  to { background-position: 300% 0%; }
+}
+
+/* Soft aurora halo glowing behind the title text */
+.app > h1::before {
+  content: "";
+  position: absolute;
+  top: 58%;
+  left: 50%;
+  width: min(46rem, 90%);
+  height: 14rem;
+  transform: translate(-50%, -50%);
+  z-index: -2;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(124, 109, 249, 0.45) 0%,
+    rgba(34, 211, 238, 0.22) 45%,
+    transparent 75%
+  );
+  filter: blur(8px);
+  animation: haloPulse 4.5s ease-in-out infinite;
+}
+
+@keyframes haloPulse {
+  0%, 100% { opacity: 0.75; transform: translate(-50%, -50%) scale(1); }
+  50%      { opacity: 1;    transform: translate(-50%, -50%) scale(1.06); }
+}
+
+/* Animated drawing underline beneath the title — a gradient bar that
+   sweeps in on load and then gently breathes, anchoring the hero. */
+.app > h1::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 0.4rem;
+  width: min(14rem, 50%);
+  height: 0.3rem;
+  border-radius: var(--radius-pill);
+  background: linear-gradient(90deg, transparent, var(--accent-cyan), var(--accent-violet), transparent);
+  transform: translateX(-50%) scaleX(0);
+  transform-origin: center;
+  animation: underlineDraw 1.1s var(--ease-out-soft) 0.2s forwards,
+             underlineGlow 3s ease-in-out 1.3s infinite;
+  box-shadow: 0 0 1.2rem rgba(34, 211, 238, 0.7);
+}
+
+@keyframes underlineDraw {
+  to { transform: translateX(-50%) scaleX(1); }
+}
+
+@keyframes underlineGlow {
+  0%, 100% { opacity: 0.7; }
+  50%      { opacity: 1; }
+}
+
+/* --------------------------------------------------------------------------------------
+   3b. HERO BACKGROUND IMAGE — pure CSS, no JSX changes, no external files
+   --------------------------------------------------------------------------------------
+   An inline SVG data-URI is used as a background-image directly on the <h1> itself
+   (no extra markup needed). It depicts a soft analytics motif — bar chart columns,
+   a rising line-graph polyline, and scattered data nodes — rendered in the same
+   palette as the rest of the dashboard so it reads as part of the design rather
+   than a decorative sticker. See section 3c below for the parallax behavior.
+*/
+
+/* ------------------------------------------------------------------------------------------
+   4. UPLOAD CONSOLE
+   ------------------------------------------------------------------------------------------ */
+
+.upload-box {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 44rem;
+  align-self: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+
+  padding: var(--space-4) var(--space-3);
+  margin-bottom: var(--space-4);
+
+  background: var(--glass-fill);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  backdrop-filter: blur(20px) saturate(150%);
+  -webkit-backdrop-filter: blur(20px) saturate(150%);
+  box-shadow:
+    0 1.6rem 3.4rem var(--glass-shadow),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+
+  transition: transform var(--dur-med) var(--ease-out-soft),
+              box-shadow var(--dur-med) var(--ease-out-soft);
+}
+
+.upload-box::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(135deg, rgba(34, 211, 238, 0.08), rgba(168, 85, 247, 0.08));
+  pointer-events: none;
+}
+
+.upload-box:hover {
+  transform: translateY(-0.25rem);
+  box-shadow:
+    0 2.2rem 4rem var(--glass-shadow),
+    inset 0 1px 0 rgba(255, 255, 255, 0.45);
+}
+
+.upload-box input[type="file"] {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  font-family: var(--font-body);
+  font-size: clamp(0.85rem, 1.4vw, 0.95rem);
+  color: var(--paper);
+  padding: var(--space-2);
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px dashed var(--glass-border);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: background var(--dur-fast) ease, border-color var(--dur-fast) ease;
+}
+
+.upload-box input[type="file"]:hover {
+  background: rgba(255, 255, 255, 0.18);
+  border-color: var(--accent-cyan);
+}
+
+.upload-box input[type="file"]::file-selector-button {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: var(--ink);
+  background: var(--paper);
+  border: none;
+  border-radius: var(--radius-pill);
+  padding: 0.55rem 1.1rem;
+  margin-right: var(--space-2);
+  cursor: pointer;
+  transition: background var(--dur-fast) ease, transform var(--dur-fast) ease;
+}
+
+.upload-box input[type="file"]::file-selector-button:hover {
+  background: var(--accent-cyan);
+  transform: translateY(-1px);
+}
+
+.upload-box .file-name {
+  position: relative;
+  z-index: 1;
+  font-family: var(--font-mono);
+  font-size: clamp(0.85rem, 1.5vw, 1.05rem);
+  font-weight: 700;
+  color: var(--paper);
+  background: rgba(255, 255, 255, 0.12);
+  padding: 0.35rem 1rem;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--glass-border);
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ------------------------------------------------------------------------------------------
+   5. PREMIUM BUTTONS — glow-pulse + sheen sweep
+   ------------------------------------------------------------------------------------------ */
+
+.upload-box button,
+.cards button {
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+  isolation: isolate;
+
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(0.9rem, 1.5vw, 1rem);
+  letter-spacing: 0.01em;
+  color: var(--paper);
+
+  padding: 0.85rem 2.2rem;
+  border: none;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+
+  background: linear-gradient(135deg, var(--ink) 0%, #2b2470 60%, var(--bg-mid) 100%);
+  box-shadow:
+    0 0.6rem 1.6rem rgba(10, 8, 35, 0.55),
+    0 0 0 0 rgba(34, 211, 238, 0.6);
+
+  transition: transform var(--dur-fast) var(--ease-out-soft),
+              box-shadow var(--dur-med) var(--ease-out-soft);
+  animation: btnGlowPulse 3.2s ease-in-out infinite;
+}
+
+@keyframes btnGlowPulse {
+  0%, 100% { box-shadow: 0 0.6rem 1.6rem rgba(10, 8, 35, 0.55), 0 0 0 0 rgba(34, 211, 238, 0.35); }
+  50%      { box-shadow: 0 0.6rem 1.6rem rgba(10, 8, 35, 0.55), 0 0 1.2rem 0.15rem rgba(34, 211, 238, 0.45); }
+}
+
+.upload-box button::before,
+.cards button::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(120deg, transparent 30%, rgba(255, 255, 255, 0.4) 50%, transparent 70%);
+  transform: translateX(-120%);
+  transition: transform var(--dur-slow) var(--ease-out-soft);
+}
+
+.upload-box button:hover,
+.cards button:hover {
+  transform: translateY(-0.18rem) scale(1.02);
+  animation-play-state: paused;
+  box-shadow:
+    0 1rem 2.4rem rgba(10, 8, 35, 0.6),
+    0 0 1.6rem 0.2rem rgba(34, 211, 238, 0.55);
+}
+
+.upload-box button:hover::before,
+.cards button:hover::before {
+  transform: translateX(120%);
+}
+
+.upload-box button:active,
+.cards button:active {
+  transform: translateY(0) scale(0.99);
+}
+
+/* ------------------------------------------------------------------------------------------
+   6. CARD RIBBON — 3D tilt-on-hover glass tiles
+   ------------------------------------------------------------------------------------------ */
+
+.cards {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+  gap: var(--space-3);
+  align-items: stretch;
+
+  margin-bottom: var(--space-4);
+  perspective: 60rem;
+}
+
+.card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(0.95rem, 1.6vw, 1.15rem);
+  color: var(--paper);
+  text-align: center;
+
+  padding: var(--space-3) var(--space-2);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  user-select: none;
+  overflow: hidden;
+  transform-style: preserve-3d;
+
+  background: var(--glass-fill);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(16px) saturate(150%);
+  -webkit-backdrop-filter: blur(16px) saturate(150%);
+  box-shadow: 0 0.8rem 1.8rem var(--glass-shadow);
+
+  transition: transform var(--dur-med) var(--ease-spring),
+              background var(--dur-med) ease,
+              border-color var(--dur-med) ease,
+              box-shadow var(--dur-med) var(--ease-out-soft);
+}
+
+/* Slim glowing accent bar sliding in from the left — single deliberate cue */
+.card::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 0.28rem;
+  background: linear-gradient(180deg, var(--accent-cyan), var(--accent-violet));
+  transform: scaleY(0);
+  transform-origin: center;
+  transition: transform var(--dur-med) var(--ease-out-soft);
+  box-shadow: 0 0 0.8rem rgba(34, 211, 238, 0.7);
+}
+
+/* Sheen sweep across the card on hover */
+.card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(115deg, transparent 35%, rgba(255, 255, 255, 0.25) 50%, transparent 65%);
+  transform: translateX(-130%);
+  transition: transform var(--dur-slow) var(--ease-out-soft);
+  pointer-events: none;
+}
+
+.card:hover {
+  transform: translateY(-0.4rem) rotateX(4deg) scale(1.02);
+  background: var(--glass-fill-strong);
+  border-color: rgba(34, 211, 238, 0.55);
+  box-shadow:
+    0 1.6rem 3rem var(--glass-shadow),
+    0 0 0 1px rgba(34, 211, 238, 0.3),
+    0 0.8rem 2rem rgba(124, 109, 249, 0.3);
+}
+
+.card:hover::before {
+  transform: scaleY(1);
+}
+
+.card:hover::after {
+  transform: translateX(130%);
+}
+
+.card.active {
+  background: rgba(255, 255, 255, 0.95);
+  color: var(--ink);
+  border-color: var(--accent-cyan);
+  transform: translateY(-0.25rem) scale(1.015);
+  box-shadow:
+    0 1.4rem 2.8rem rgba(10, 8, 35, 0.45),
+    0 0 0 1px rgba(34, 211, 238, 0.45),
+    0 0 1.6rem rgba(34, 211, 238, 0.3);
+}
+
+.card.active::before {
+  transform: scaleY(1);
+  background: linear-gradient(180deg, var(--bg-mid), var(--accent-violet));
+}
+
+/* --------------------------------------------------------------------------------------
+   UNIFIED CARD COLOR — Statistics / Students / Grades / Search
+   --------------------------------------------------------------------------------------
+   All four nav tiles share one consistent grey accent identity (base tint, left
+   accent bar, and hover/active glow) instead of separate colors per card — a
+   calmer, more uniform look matching the neutral grey/dark canvas.
+*/
+
+.card {
+  background: linear-gradient(135deg, rgba(75, 85, 99, 0.32), rgba(148, 163, 184, 0.16));
+  border-color: rgba(148, 163, 184, 0.4);
+}
+
+.card::before {
+  background: linear-gradient(180deg, var(--card-stats-a), var(--card-stats-b));
+  box-shadow: 0 0 0.8rem rgba(148, 163, 184, 0.7);
+}
+
+.card:hover {
+  border-color: rgba(148, 163, 184, 0.65);
+  box-shadow:
+    0 1.6rem 3rem var(--glass-shadow),
+    0 0 0 1px rgba(148, 163, 184, 0.4),
+    0 0.8rem 2rem rgba(75, 85, 99, 0.4);
+}
+
+.card.active {
+  border-color: var(--card-stats-b);
+  box-shadow:
+    0 1.4rem 2.8rem rgba(10, 11, 14, 0.45),
+    0 0 0 1px rgba(148, 163, 184, 0.5),
+    0 0 1.6rem rgba(75, 85, 99, 0.4);
+}
+
+.card.active::before {
+  background: linear-gradient(180deg, var(--card-stats-a), var(--card-stats-b));
+}
+
+/* The search input + button wrapper sits inside .cards as its own grid cell */
+.cards > div:has(input[type="text"]) {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  justify-content: center;
+}
+
+.cards input[type="text"] {
+  width: 100%;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.94);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-pill);
+  padding: 0.7rem 1.2rem;
+  box-shadow: 0 0.4rem 1.2rem var(--glass-shadow);
+  transition: box-shadow var(--dur-fast) ease, transform var(--dur-fast) ease;
+}
+
+.cards input[type="text"]::placeholder {
+  color: var(--ink-soft);
+}
+
+.cards input[type="text"]:focus {
+  transform: translateY(-1px);
+  box-shadow: 0 0 0 0.2rem var(--accent-cyan-soft), 0 0.6rem 1.6rem var(--accent-cyan-soft);
+}
+
+.cards > div:has(input[type="text"]) button {
+  width: 100%;
+  padding: 0.7rem 1.5rem;
+}
+
+/* ------------------------------------------------------------------------------------------
+   7. CONTENT PANEL — expanding glass surface for active card's data
+   ------------------------------------------------------------------------------------------ */
+
+.content {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+
+  background: rgba(255, 255, 255, 0.96);
+  color: var(--ink);
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(24px) saturate(170%);
+  -webkit-backdrop-filter: blur(24px) saturate(170%);
+  box-shadow:
+    0 2.2rem 5rem rgba(10, 8, 35, 0.5),
+    0 0 0 1px rgba(34, 211, 238, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+
+  padding: clamp(1.5rem, 3.5vw, 3rem);
+  animation: panelRise var(--dur-slow) var(--ease-out-soft);
+}
+
+@keyframes panelRise {
+  from { opacity: 0; transform: translateY(1.4rem) scale(0.98); filter: blur(4px); }
+  to   { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+}
+
+.content h2 {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(1.3rem, 2.4vw, 1.8rem);
+  color: var(--ink);
+  margin: 0 0 var(--space-3);
+  padding-bottom: var(--space-2);
+  border-bottom: 2px solid rgba(67, 56, 202, 0.15);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.content h3 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(1.05rem, 1.8vw, 1.25rem);
+  color: var(--bg-mid);
+  margin: var(--space-3) 0 var(--space-2);
+}
+
+.content p {
+  font-size: clamp(0.95rem, 1.4vw, 1.05rem);
+  line-height: 1.65;
+  color: var(--ink-soft);
+  margin: 0 0 var(--space-1);
+}
+
+.content strong {
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.content .stat,
+.content .stat-value {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--bg-mid);
+}
+
+.content ul {
+  list-style: none;
+  margin: 0 0 var(--space-3);
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(13rem, 1fr));
+  gap: var(--space-2);
+}
+
+.content ul li {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--ink);
+  background: linear-gradient(135deg, rgba(67, 56, 202, 0.08), rgba(34, 211, 238, 0.08));
+  border: 1px solid rgba(67, 56, 202, 0.15);
+  border-radius: var(--radius-sm);
+  padding: 0.75rem 1rem;
+  transition: transform var(--dur-fast) ease, box-shadow var(--dur-fast) ease;
+}
+
+.content ul li:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0.6rem 1.4rem rgba(67, 56, 202, 0.18);
+}
+
+.content table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin: var(--space-2) 0 var(--space-3);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: 0 0.6rem 1.6rem rgba(10, 8, 35, 0.12);
+  font-size: clamp(0.82rem, 1.3vw, 0.95rem);
+}
+
+.content thead {
+  background: linear-gradient(135deg, var(--bg-deep), var(--bg-mid));
+}
+
+.content thead th {
+  font-family: var(--font-display);
+  font-weight: 700;
+  color: var(--paper);
+  text-align: left;
+  padding: 0.85rem 1.1rem;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+.content tbody tr {
+  background: var(--paper);
+  transition: background var(--dur-fast) ease;
+}
+
+.content tbody tr:nth-child(even) {
+  background: #f6f7fe;
+}
+
+.content tbody tr:hover {
+  background: var(--accent-cyan-soft);
+}
+
+.content tbody td {
+  padding: 0.75rem 1.1rem;
+  color: var(--ink);
+  border-bottom: 1px solid rgba(10, 8, 35, 0.06);
+  font-family: var(--font-mono);
+}
+
+.content tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.content .pass,
+.content .status-pass {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: #065f46;
+  background: rgba(52, 211, 153, 0.18);
+  border: 1px solid rgba(52, 211, 153, 0.45);
+  border-radius: var(--radius-pill);
+  padding: 0.25rem 0.8rem;
+}
+
+.content .fail,
+.content .status-fail {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: #9f1239;
+  background: rgba(251, 113, 133, 0.18);
+  border: 1px solid rgba(251, 113, 133, 0.45);
+  border-radius: var(--radius-pill);
+  padding: 0.25rem 0.8rem;
+}
+
+.content .grade-a { color: #065f46; }
+.content .grade-b { color: #1d4ed8; }
+.content .grade-c { color: #92400e; }
+.content .grade-d { color: #b45309; }
+.content .grade-f { color: #9f1239; }
+
+.content button {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--paper);
+  background: linear-gradient(135deg, var(--bg-mid), var(--accent-violet));
+  border: none;
+  border-radius: var(--radius-pill);
+  padding: 0.7rem 1.6rem;
+  cursor: pointer;
+  box-shadow: 0 0.6rem 1.4rem rgba(67, 56, 202, 0.35);
+  transition: transform var(--dur-fast) var(--ease-out-soft),
+              box-shadow var(--dur-fast) var(--ease-out-soft);
+}
+
+.content button:hover {
+  transform: translateY(-0.15rem);
+  box-shadow: 0 0.9rem 1.8rem rgba(67, 56, 202, 0.45);
+}
+
+.content img {
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--radius-md);
+  background: var(--paper);
+  box-shadow: 0 0.8rem 2rem rgba(10, 8, 35, 0.15);
+  margin: var(--space-2) 0;
+}
+
+/* ------------------------------------------------------------------------------------------
+   8. SCROLLBAR
+   ------------------------------------------------------------------------------------------ */
+
+::-webkit-scrollbar {
+  width: 0.7rem;
+  height: 0.7rem;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: var(--radius-pill);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+}
+
+/* ------------------------------------------------------------------------------------------
+   9. RESPONSIVE REFINEMENTS
+   ------------------------------------------------------------------------------------------ */
+
+@media (max-width: 30rem) {
+  .app > h1 {
+    font-size: clamp(1.8rem, 9vw, 2.4rem);
+    margin: 1rem 0 2.2rem;
+  }
+
+  .app > h1::before {
+    height: 9rem;
+  }
+
+  .cards {
+    grid-template-columns: 1fr;
+  }
+
+  .content table {
+    font-size: 0.78rem;
+  }
+
+  .content thead th,
+  .content tbody td {
+    padding: 0.6rem 0.7rem;
+  }
+}
+
+@media (min-width: 90rem) {
+  .cards {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+
+@media (min-width: 120rem) {
+  .cards {
+    grid-template-columns: repeat(6, 1fr);
+  }
+}
+
+@media (orientation: landscape) and (max-height: 32rem) {
+  .app {
+    padding-top: var(--space-3);
+  }
+
+  .app > h1 {
+    font-size: clamp(1.6rem, 4vw, 2.4rem);
+    margin: 0.75rem 0 1.8rem;
+  }
+
+  .upload-box {
+    padding: var(--space-3) var(--space-2);
+  }
+}
+
+/* ------------------------------------------------------------------------------------------
+   10. ZOOM-SAFETY NET
+   ------------------------------------------------------------------------------------------
+   Every layout-critical dimension above is rem/em/%/fr/clamp-based — no hardcoded
+   px widths — so browser zoom (Ctrl/Cmd + / -) scales type, spacing, and grid
+   tracks together without breaking wrapping or causing horizontal overflow.
+*/
+
+.app, .cards, .content, .upload-box {
+  min-width: 0;
+}
+
+.card, .cards > div {
+  min-width: 0;
+  overflow-wrap: break-word;
+}
