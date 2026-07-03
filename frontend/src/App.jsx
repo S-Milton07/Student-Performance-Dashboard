@@ -19,7 +19,7 @@ function App() {
     if (selectedFile) {
       const formData = new FormData();
       formData.append("file", selectedFile)
-      const response = await fetch("http://127.0.0.1:5000/upload", {
+      const response = await fetch("https://student-performance-dashboard-q0ts.onrender.com/upload", {
         method: "POST",
         body: formData
       }
@@ -37,7 +37,7 @@ function App() {
 
   const searchStudent = async () => {
 
-    const response = await fetch("http://127.0.0.1:5000/search", {
+    const response = await fetch("https://student-performance-dashboard-q0ts.onrender.com/search", {
 
       method: "POST",
 
