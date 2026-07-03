@@ -1,6 +1,6 @@
 import React from 'react'
 import PieChart from './pieChart'
-import BarChart from "./BarChart";
+import BarChart from './barChart'
 
 const GradesCard = ({ result }) => {
     return (
