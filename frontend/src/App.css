@@ -1,43 +1,5 @@
-/* ==========================================================================================
-   STUDENT PERFORMANCE DASHBOARD — App.css  (v2 — Premium VFX Edition)
-   ==========================================================================================
-   Design system: "Aurora Glass" — an animated mesh-gradient analytics dashboard with a
-   hero-style title treatment, layered glass cards, and deliberate motion throughout.
-
-   Token system:
-     Color:
-       --bg-deep       #16133a   (near-black indigo, canvas base)
-       --bg-mid        #4338ca   (royal indigo)
-       --bg-bright     #7c6df9   (periwinkle highlight)
-       --accent-cyan   #22d3ee   (primary data accent)
-       --accent-violet #a855f7   (secondary accent, used in gradients/glow)
-       --accent-mint   #34d399   (positive / pass state)
-       --accent-amber  #fbbf24   (warning / mid grades)
-       --accent-rose   #fb7185   (negative / fail state)
-       --ink           #0f1230   (text on light glass surfaces)
-       --paper         #ffffff
-
-     Type:
-       Display : "Sora"           — the hero title and card headings
-       Body    : "Inter"          — paragraphs, table data
-       Mono    : "JetBrains Mono" — stats, IDs, scores (numbers read as data)
-
-     Layout:
-       Full-bleed animated mesh-gradient canvas → oversized hero title with glow +
-       animated underline → glass upload console → card ribbon with 3D tilt-on-hover →
-       expanding glass content panel.
-
-     Signature element:
-       The hero title sits inside a soft aurora glow halo with an animated gradient
-       sweep and a drawing underline accent — the page's one big, unmistakable moment.
-       The card ribbon's 3D tilt-on-hover is the secondary, interactive signature.
-   ========================================================================================== */
-
 @import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap');
 
-/* ------------------------------------------------------------------------------------------
-   0. DESIGN TOKENS
-   ------------------------------------------------------------------------------------------ */
 :root {
   --bg-deep: #1c1f26;
   --bg-mid: #2e333d;
@@ -52,7 +14,7 @@
   --ink-soft: #4b4f72;
   --paper: #ffffff;
 
-  /* Single shared card accent color (Statistics / Students / Grades / Search) */
+
   --card-stats-a: #4b5563;
   --card-stats-b: #94a3b8;
   --card-students-a: #4b5563;
@@ -89,10 +51,6 @@
   --dur-slow: 700ms;
 }
 
-/* ------------------------------------------------------------------------------------------
-   1. RESET & BASE
-   ------------------------------------------------------------------------------------------ */
-
 * {
   box-sizing: border-box;
 }
@@ -118,8 +76,6 @@ body {
   background: var(--bg-deep);
 }
 
-/* Reset Vite's default #root scaffold rule (max-width/centering) so the
-   dashboard goes truly edge-to-edge instead of leaving empty side gutters. */
 #root {
   width: 100% !important;
   max-width: none !important;
@@ -145,10 +101,6 @@ a:focus-visible {
   outline: 0.15rem solid var(--accent-cyan);
   outline-offset: 0.2rem;
 }
-
-/* ------------------------------------------------------------------------------------------
-   2. CANVAS — animated aurora mesh-gradient background + drifting grid + particles
-   ------------------------------------------------------------------------------------------ */
 
 .app {
   position: relative;
@@ -179,19 +131,6 @@ a:focus-visible {
   100% { background-position: 0% 0%, 14% 10%, 86% 14%, 88% 90%, 8% 86%, 12% 12%; }
 }
 
-/* --------------------------------------------------------------------------------------
-   HERO BACKGROUND ARTWORK — pure CSS, zero JSX changes, zero external image files.
-   --------------------------------------------------------------------------------------
-   This is a hand-built inline SVG (encoded as a data-URI) depicting a soft analytics
-   motif behind the title: a rising bar-chart cluster, a climbing line-graph polyline,
-   and scattered data nodes — all drawn in the dashboard's own palette so it reads as
-   part of the design system rather than a decorative sticker.
-
-   Parallax: `background-attachment: fixed` pins this artwork to the *viewport*
-   instead of the page, so as the user scrolls the page content, the artwork stays
-   put relative to the screen and the foreground glides over it — the classic
-   "scrolling parallax" depth cue, achieved with zero JavaScript.
-*/
 .app::before {
   content: "";
   position: fixed;
@@ -212,8 +151,6 @@ a:focus-visible {
   50%      { background-position: center 5.2rem; }
 }
 
-/* Faint animated grid overlay layered above the artwork — reads as "analytics
-   software", evokes chart gridlines without literally drawing another chart. */
 .app::after {
   content: "";
   position: fixed;
@@ -234,20 +171,6 @@ a:focus-visible {
   100% { background-position: 3.2rem 6.4rem, -3.2rem 3.2rem; }
 }
 
-/* Soft vignette so content near edges still reads as "inside" the canvas.
-   Folded into .app's own background stack (section 2) as an extra radial
-   layer — no extra markup needed, and it sits correctly behind ::before/::after. */
-
-/* ------------------------------------------------------------------------------------------
-   3. HERO TITLE — the page's one big, unmistakable moment
-   ------------------------------------------------------------------------------------------
-   We style the existing <h1>Student Performance Dashboard</h1> directly — no JSX
-   changes required. The heading becomes an oversized, glowing, animated-gradient
-   hero with a halo behind it, a drawing underline accent beneath it, and a
-   CSS-only analytics illustration (bars + line graph + floating data dots)
-   sitting behind/around it that drifts gently as the page is scrolled (parallax).
-*/
-
 .app > h1 {
   position: relative;
   z-index: 1;
@@ -263,7 +186,6 @@ a:focus-visible {
   margin: clamp(1rem, 3vw, 2.5rem) 0 clamp(2.5rem, 5vw, 4rem);
   padding: clamp(2rem, 6vw, 3.5rem) 1rem clamp(1rem, 3vw, 2rem);
 
-  /* Animated gradient fill on the text itself */
   background-image: linear-gradient(
     100deg,
     var(--paper) 0%,
@@ -287,7 +209,6 @@ a:focus-visible {
   to { background-position: 300% 0%; }
 }
 
-/* Soft aurora halo glowing behind the title text */
 .app > h1::before {
   content: "";
   position: absolute;
@@ -312,8 +233,6 @@ a:focus-visible {
   50%      { opacity: 1;    transform: translate(-50%, -50%) scale(1.06); }
 }
 
-/* Animated drawing underline beneath the title — a gradient bar that
-   sweeps in on load and then gently breathes, anchoring the hero. */
 .app > h1::after {
   content: "";
   position: absolute;
@@ -338,20 +257,6 @@ a:focus-visible {
   0%, 100% { opacity: 0.7; }
   50%      { opacity: 1; }
 }
-
-/* --------------------------------------------------------------------------------------
-   3b. HERO BACKGROUND IMAGE — pure CSS, no JSX changes, no external files
-   --------------------------------------------------------------------------------------
-   An inline SVG data-URI is used as a background-image directly on the <h1> itself
-   (no extra markup needed). It depicts a soft analytics motif — bar chart columns,
-   a rising line-graph polyline, and scattered data nodes — rendered in the same
-   palette as the rest of the dashboard so it reads as part of the design rather
-   than a decorative sticker. See section 3c below for the parallax behavior.
-*/
-
-/* ------------------------------------------------------------------------------------------
-   4. UPLOAD CONSOLE
-   ------------------------------------------------------------------------------------------ */
 
 .upload-box {
   position: relative;
@@ -452,10 +357,6 @@ a:focus-visible {
   white-space: nowrap;
 }
 
-/* ------------------------------------------------------------------------------------------
-   5. PREMIUM BUTTONS — glow-pulse + sheen sweep
-   ------------------------------------------------------------------------------------------ */
-
 .upload-box button,
 .cards button {
   position: relative;
@@ -519,10 +420,6 @@ a:focus-visible {
   transform: translateY(0) scale(0.99);
 }
 
-/* ------------------------------------------------------------------------------------------
-   6. CARD RIBBON — 3D tilt-on-hover glass tiles
-   ------------------------------------------------------------------------------------------ */
-
 .cards {
   position: relative;
   z-index: 1;
@@ -569,7 +466,6 @@ a:focus-visible {
               box-shadow var(--dur-med) var(--ease-out-soft);
 }
 
-/* Slim glowing accent bar sliding in from the left — single deliberate cue */
 .card::before {
   content: "";
   position: absolute;
@@ -584,7 +480,6 @@ a:focus-visible {
   box-shadow: 0 0 0.8rem rgba(34, 211, 238, 0.7);
 }
 
-/* Sheen sweep across the card on hover */
 .card::after {
   content: "";
   position: absolute;
@@ -629,13 +524,6 @@ a:focus-visible {
   background: linear-gradient(180deg, var(--bg-mid), var(--accent-violet));
 }
 
-/* --------------------------------------------------------------------------------------
-   UNIFIED CARD COLOR — Statistics / Students / Grades / Search
-   --------------------------------------------------------------------------------------
-   All four nav tiles share one consistent grey accent identity (base tint, left
-   accent bar, and hover/active glow) instead of separate colors per card — a
-   calmer, more uniform look matching the neutral grey/dark canvas.
-*/
 
 .card {
   background: linear-gradient(135deg, rgba(75, 85, 99, 0.32), rgba(148, 163, 184, 0.16));
@@ -667,7 +555,6 @@ a:focus-visible {
   background: linear-gradient(180deg, var(--card-stats-a), var(--card-stats-b));
 }
 
-/* The search input + button wrapper sits inside .cards as its own grid cell */
 .cards > div:has(input[type="text"]) {
   display: flex;
   flex-direction: column;
@@ -701,10 +588,6 @@ a:focus-visible {
   width: 100%;
   padding: 0.7rem 1.5rem;
 }
-
-/* ------------------------------------------------------------------------------------------
-   7. CONTENT PANEL — expanding glass surface for active card's data
-   ------------------------------------------------------------------------------------------ */
 
 .content {
   position: relative;
@@ -912,9 +795,6 @@ a:focus-visible {
   margin: var(--space-2) 0;
 }
 
-/* ------------------------------------------------------------------------------------------
-   8. SCROLLBAR
-   ------------------------------------------------------------------------------------------ */
 
 ::-webkit-scrollbar {
   width: 0.7rem;
@@ -938,10 +818,6 @@ a:focus-visible {
   scrollbar-width: thin;
   scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
 }
-
-/* ------------------------------------------------------------------------------------------
-   9. RESPONSIVE REFINEMENTS
-   ------------------------------------------------------------------------------------------ */
 
 @media (max-width: 30rem) {
   .app > h1 {
@@ -993,14 +869,6 @@ a:focus-visible {
     padding: var(--space-3) var(--space-2);
   }
 }
-
-/* ------------------------------------------------------------------------------------------
-   10. ZOOM-SAFETY NET
-   ------------------------------------------------------------------------------------------
-   Every layout-critical dimension above is rem/em/%/fr/clamp-based — no hardcoded
-   px widths — so browser zoom (Ctrl/Cmd + / -) scales type, spacing, and grid
-   tracks together without breaking wrapping or causing horizontal overflow.
-*/
 
 .app, .cards, .content, .upload-box {
   min-width: 0;

@@ -1,30 +1,8 @@
-/**
- * ==========================================================================================
- * LOGIN PAGE COMPONENT (Login.jsx)
- * ==========================================================================================
- * Standalone login page. Renders first when the app starts. On successful credential
- * match, navigates to the existing dashboard (App.jsx) using React Router.
- *
- * IMPORTANT: This file does NOT modify App.jsx in any way. App.jsx's existing code,
- * UI, state, and API calls remain completely untouched. This component only handles
- * authentication and then hands off control to the router, which renders App.jsx
- * at the "/dashboard" route exactly as it already is.
- *
- * Design language: reuses the same glassmorphism / dark-grey gradient / glass-card
- * visual system as the existing App.css so the login page feels like part of the
- * same application. Layout-specific rules unique to the login page (the centered
- * single card, the input fields, the error message) live in Login.css.
- * ==========================================================================================
- */
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "./App.css";   // reuse the existing dashboard's color tokens, fonts, glass styles
-import "./Login.css"; // login-page-specific layout on top of those shared tokens
+import "./App.css";   
+import "./Login.css"; 
 
-// Hardcoded credentials as specified in the requirements.
-// (For a real production system these would be validated against a backend/auth
-// service rather than hardcoded on the client — kept simple here per the request.)
 const VALID_USERNAME = "MiltonLawrence";
 const VALID_PASSWORD = "Milton@2005";
 
@@ -41,12 +19,9 @@ function Login() {
     setError("");
     setIsChecking(true);
 
-    // Small artificial delay so the button's "checking" state and the page
-    // transition feel smooth and intentional, rather than an instant jump cut.
     setTimeout(() => {
       if (username === VALID_USERNAME && password === VALID_PASSWORD) {
-        // Successful match -> navigate to the existing dashboard (App.jsx),
-        // which is rendered at the "/dashboard" route, completely unchanged.
+      
         navigate("/dashboard");
       } else {
         setError("Invalid username or password. Please try again.");

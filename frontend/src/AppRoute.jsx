@@ -15,7 +15,7 @@
  */
 
 import { Routes, Route, Navigate } from "react-router-dom";
-import Login from "./login.jsx";
+import Login from "./Login.jsx";
 import App from "./App.jsx";
 
 function AppRoutes() {
